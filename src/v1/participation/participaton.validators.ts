@@ -50,7 +50,7 @@ export class IncorrectBeginningTimeValidator extends BaseValidator {
         }
         const analyzer: NativeDateAnalyzer = new NativeDateAnalyzer();
         // const dateNow: string = Date.now().toLocaleString();
-        const dateNow: string = '2022-07-06T21:22:00.577Z';// testData
+        const dateNow: string = '2019-07-06T21:10:23.999Z';// testData
         if (analyzer.less(dateNow, exam.startsAt))
             throw new ForbiddenException('Exam wasn\'t begun');
         if (analyzer.more(dateNow, exam.endsAt))

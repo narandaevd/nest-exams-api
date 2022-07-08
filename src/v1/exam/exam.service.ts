@@ -5,9 +5,9 @@ import { FindOneOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { ExamUpdateDto } from './dto/examUpdate.dto';
 import { ExamCreateDto } from './dto/examCreate.dto';
 import { QueryPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { NativeDateAnalyzer, Interval } from '../../utils/dateAnalyzer';
 import { BaseValidator } from 'src/baseClasses/validator/baseValidator';
 import { InterceptingTimeValidator, SameNameValidator } from './exam.validators';
+import { Participation } from '../participation/participation.entity';
 
 abstract class BaseExamCreator {
     protected _repo: Repository<Exam>;
@@ -38,7 +38,10 @@ interface IExamService {
 
 @Injectable()
 export class ExamService implements IExamService {
-    constructor(@InjectRepository(Exam) private _repo: Repository<Exam>) {}
+    constructor(
+        @InjectRepository(Exam) private _repo: Repository<Exam>,
+        @InjectRepository(Participation) private _parRepo: Repository<Participation>
+    ) {}
     
     getAllExams(): Promise<Exam[]> {
         return this._repo.find();
@@ -77,7 +80,12 @@ export class ExamService implements IExamService {
     }
     async deleteExamById(id: number): Promise<Exam> {
         const foundedExam: Exam = await this.getExamById(id);
-        return await this._repo.remove(foundedExam);
+        const pars: Participation[] = await this._parRepo.find({
+            where: {examId: id}
+        });
+        await this._parRepo.remove(pars);
+        let deletedExam: Exam = await this._repo.remove(foundedExam);
+        return deletedExam;
     }
     async findExamByOptions(opt: FindOneOptions<Exam>): Promise<Exam> {
         const exam: Exam = await this._repo.findOne(opt);

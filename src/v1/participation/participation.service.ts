@@ -1,11 +1,9 @@
-import { Injectable, ForbiddenException, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Participation } from './participation.entity';
 import { Repository, FindOneOptions } from 'typeorm';
-import { Exam } from '../exam/exam.entity';
 import { ExamService } from '../exam/exam.service';
 import { ParticipateDto } from './dto/participate.dto';
-import { NativeDateAnalyzer } from '../../utils/dateAnalyzer';
 import { BaseValidator } from 'src/baseClasses/validator/baseValidator';
 import { 
     SameExamParticipationValidator,
