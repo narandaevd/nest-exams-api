@@ -3,7 +3,7 @@ export interface Interval {
     end: string;
 }
 
-abstract class BaseDateAnalyzer {
+export abstract class BaseDateAnalyzer {
     protected static isCorrectType(date: unknown): boolean { return false; };
 
     abstract more(d1: Date, d2: Date): boolean;

@@ -6,7 +6,7 @@ import { ExamUpdateDto } from './dto/examUpdate.dto';
 import { ExamCreateDto } from './dto/examCreate.dto';
 import { QueryPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseValidator } from 'src/baseClasses/validator/baseValidator';
-import { InterceptingTimeValidator, SameNameValidator } from './exam.validators';
+import { BeginMoreThanEndValidator, InterceptingTimeValidator, SameNameValidator } from './exam.validators';
 import { Participation } from '../participation/participation.entity';
 
 abstract class BaseExamCreator {
@@ -48,8 +48,9 @@ export class ExamService implements IExamService {
     }
     async addExam(dto: ExamCreateDto): Promise<Exam> {
         const validator: BaseValidator = new SameNameValidator();
-        validator.addValidators([
-            new InterceptingTimeValidator()
+        validator.add([
+            new InterceptingTimeValidator(),
+            new BeginMoreThanEndValidator()
         ]);
         const options: any = {
             service: this,
@@ -73,7 +74,7 @@ export class ExamService implements IExamService {
     }
     async patchExamById(id: number, dto: ExamUpdateDto): Promise<Exam> {
         const findOptions: FindOptionsWhere<Exam> = {id};
-        const updateOptions: QueryPartialEntity<Exam>  = {...dto};
+        const updateOptions: QueryPartialEntity<Exam> = {...dto};
         const exam: Exam = await this.getExamById(id);
         this._repo.update(findOptions, updateOptions);
         return exam;

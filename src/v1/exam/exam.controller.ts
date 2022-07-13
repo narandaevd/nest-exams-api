@@ -19,19 +19,16 @@ export class ExamController {
         return this._service.addExam(dto);
     }
     @Get('/:id')
-    getExamById(@Param('id', ParseIntPipe) id: string): Promise<Exam> {
-        const numericId: number = parseInt(id);
-        return this._service.getExamById(numericId);
+    getExamById(@Param('id', ParseIntPipe) id: number): Promise<Exam> {
+        return this._service.getExamById(id);
     }
     @Patch('/:id')
-    patchExamById(@Param('id', ParseIntPipe) id: string, @Body() dto: ExamUpdateDto): Promise<Exam> {
-        const numericId: number = parseInt(id);
-        return this._service.patchExamById(numericId, dto);
+    patchExamById(@Param('id', ParseIntPipe) id: number, @Body() dto: ExamUpdateDto): Promise<Exam> {
+        return this._service.patchExamById(id, dto);
     }
     @Delete('/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    deleteExamById(@Param('id', ParseIntPipe) id: string): Promise<Exam> {
-        const numericId: number = parseInt(id);
-        return this._service.deleteExamById(numericId);
+    deleteExamById(@Param('id', ParseIntPipe) id: number): Promise<Exam> {
+        return this._service.deleteExamById(id);
     } 
 }

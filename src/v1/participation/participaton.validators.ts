@@ -1,6 +1,6 @@
 import { ConflictException, ForbiddenException, NotAcceptableException } from "@nestjs/common";
 import { BaseValidator } from "src/baseClasses/validator/baseValidator";
-import { NativeDateAnalyzer } from "src/utils/dateAnalyzer";
+import { NativeDateAnalyzer, BaseDateAnalyzer } from "src/utils/dateAnalyzer";
 import { Exam } from "src/v1/exam/exam.entity";
 
 export class ExistableExamValidator extends BaseValidator {
@@ -48,9 +48,9 @@ export class IncorrectBeginningTimeValidator extends BaseValidator {
         } catch (e: any) {
             throw e;
         }
-        const analyzer: NativeDateAnalyzer = new NativeDateAnalyzer();
+        const analyzer: BaseDateAnalyzer = new NativeDateAnalyzer();
         // const dateNow: string = Date.now().toLocaleString();
-        const dateNow: string = '2019-07-06T21:10:23.999Z';// testData
+        const dateNow: string = '2018-08-06T21:10:24.577Z';// testData
         if (analyzer.less(dateNow, exam.startsAt))
             throw new ForbiddenException('Exam wasn\'t begun');
         if (analyzer.more(dateNow, exam.endsAt))

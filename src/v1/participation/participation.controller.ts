@@ -11,8 +11,4 @@ export class ParticipationController {
     participate(@Body() dto: ParticipateDto) {
         return this._service.participate(dto);
     }
-    @Get('/')
-    getAllParticipations() {
-        return this._service.getAllParticipations();
-    }
 }

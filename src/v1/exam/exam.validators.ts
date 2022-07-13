@@ -1,6 +1,6 @@
 import { NotAcceptableException } from "@nestjs/common";
 import { BaseValidator } from "src/baseClasses/validator/baseValidator";
-import { Interval, NativeDateAnalyzer } from "src/utils/dateAnalyzer";
+import { Interval, NativeDateAnalyzer, BaseDateAnalyzer } from "src/utils/dateAnalyzer";
 
 export class SameNameValidator extends BaseValidator {
     override async check(opt: any): Promise<void> {
@@ -35,6 +35,16 @@ export class InterceptingTimeValidator extends BaseValidator {
         })
         if (flagOfInterception)
             throw new NotAcceptableException('Exams shouldn\'t intercept by time');
+        if (this._nextValidator !== null)
+            return this._nextValidator.check(opt);
+    }
+}
+
+export class BeginMoreThanEndValidator extends BaseValidator {
+    override async check(opt: any): Promise<void> {
+        const analyzer: BaseDateAnalyzer = new NativeDateAnalyzer();
+        if (!analyzer.less(opt.dto.startsAt, opt.dto.endsAt))
+            throw new NotAcceptableException("Begin time shouldn't be more or equal than end");
         if (this._nextValidator !== null)
             return this._nextValidator.check(opt);
     }

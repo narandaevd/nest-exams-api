@@ -13,7 +13,6 @@ import {
 
 interface IParticipationService {
     participate(dto: ParticipateDto): Promise<Participation>;
-    getAllParticipations(): Promise<Participation[]>;
     getParticipation(options: FindOneOptions<Participation>): Promise<Participation>;
 }
 
@@ -48,7 +47,7 @@ export class ParticipationService implements IParticipationService {
     ) {}
     async participate(dto: ParticipateDto): Promise<Participation> {
         let validator: BaseValidator = new ExistableExamValidator();
-        validator.addValidators([
+        validator.add([
             new SameExamParticipationValidator(),
             new IncorrectBeginningTimeValidator()
         ]);
@@ -65,9 +64,6 @@ export class ParticipationService implements IParticipationService {
             dto.examId
         );
         return this._parRepo.save(participation);
-    }
-    async getAllParticipations(): Promise<Participation[]> {
-        return this._parRepo.find();
     }
     async getParticipation(options: FindOneOptions<Participation>): Promise<Participation> {
         const par: Participation = await this._parRepo.findOne(options);
